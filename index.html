@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>
+        ECF by Lila Badi
+    </title>
+</head>
+  
+<body>
+    <div class="container">
+        <header class="header">
+          <h1 id="title" class="text-center">ECF by Lila Badi</h1>
+          <p id="description" class="description text-center">
+            Veuillez vous armer de toute votre indulgence avant la lecture de ce document.
+          </p>
+        </header>
+        <form id="survey-form" class="big-form">
+          <div class="form-group">
+            <h2>2. Analyser la base de données</h2>
+            <h3>2.1 Analyse structurelle</h3>
+            <label id="name-label" for="name">A l’aide du schéma de la base de données et de l’explorateur d’objet de SQL
+              Server Management Studio, vous étudierez la base ecfCDA. Vous devez décrire le rôle de
+              la table DimCustomer et définir les liens possibles (clés étrangères) entre elle et les
+              différentes tables.</label>
+              <div>
+                <label>DimGeography</label>
+                <textarea id="comments" class="input-textarea" name="comment" disabled>DimCustomer <-  DimGeography
+DimCustomer.GeographyKey = DimGeography.GeographyKey
+                  
+La clé primaire de la table DimGeography se reporte en clé étrangère dans la table DimCustomer. Elles se joignent sur les colonnes GeographyKey.</textarea>
+              </div>  
+              <br> 
+              <div>
+                <label>FactInternetSales</label>
+                <textarea id="comments" class="input-textarea" name="comment" disabled>DimCustomer ->  FactInternetSales
+FactInternetSales.CustomerKey = DimCustomer.CustomerKey
+                  
+La clé primaire de la table DimCustomer se reporte en clé étrangère dans la table DimFactInternetSales. Elles se joignent sur les colonnes CustomerKey.</textarea>
+              </div>
+              <div>
+                <br>
+                <label>FactSurveyResponse</label>
+                <textarea id="comments" class="input-textarea" name="comment" disabled>DimCustomer ->  FactSurveyResponse
+FactSurveyResponse.CustomerKey = DimCustomer.CustomerKey
+                  
+La clé primaire de la table DimCustomer se reporte en clé étrangère dans la table FactSurveyResponse. Elles se joignent sur les colonnes CustomerKey.</textarea>
+              </div>
+              <div>
+                <br>
+                <label>vDMPrep et vAssocSeqOrders</label>
+                <textarea id="comments" class="input-textarea" name="comment" disabled>La clé primaire de la table DimCustomer est un élément de la clé primaire composite et clé étrangère des tables vDMPrep et vAssocSeqOrders.</textarea>
+              </div>
+              <div>
+              <h3>2.2 Analyse de données</h3>
+              <label id="name-label" for="name">De quel genre d’entreprises est tirée cette base de données ? Fournissez le
+                dictionnaire de données de la table DimCustomer, DimReseller et DimProduct.
+              </label>
+              <textarea id="comments" class="input-textarea" name="comment" disabled>Il s'agit d'une multinationale spécialisée dans la vente de vélos et d'accessoires liés au cyclisme.</textarea>
+          </div>
+          <div class="form-group">
+            <h3>2.3 Les règles de l’art</h3>
+              <label id="name-label" for="name">Quelles améliorations pourraient être réalisées sur cette base de données ?
+                Faire un MCD et le MPD correspondant décrivant ces améliorations.
+                Sans la mettre en place, nommez et décrivez par quelle méthode vous
+                pourriez effectuer ces améliorations. 
+              </label>
+              <textarea id="comments" class="input-textarea" name="comment" disabled></textarea>
+          </div>
+          <div class="form-group">
+            <h2>3. Manipulations</h2>
+            <h3>3.1 Interrogations</h3>
+            <label id="name-label" for="name">Consignes : Donner la requête vous permettant de répondre à la
+              question et répondez-y.</label>
+              <div>
+                <label>1. Combien y-a-t-il d'enregistrements dans les tables DimCustomer,
+                  DimPromotion et DimCurrency ?
+                  </label>
+                <textarea id="comments" class="input-textarea" name="comment" disabled>SELECT COUNT(*) AS 'Nb of Entries For DimCustomer'
+FROM DimCustomer;
+                                  
+SELECT COUNT(*) AS 'Nb of Entries For DimPromotion'
+FROM DimPromotion;
+                                  
+SELECT COUNT(*) AS 'Nb of Entries For DimCurrency'
+FROM DimCurrency;</textarea>
+                <label>Il y a 18485 entrées dans la table DimCustomer.</label>
+                <label>Il y a 19 entrées dans la table DimPromotion.</label>
+                <label>Il y a 105 entrées dans la table DimCurrency.</label>
+              </div>  
+              <br> 
+              <div>
+                <label>2. Lister par ville, par sexe et par ordre alphabétique les clients habitant aux
+                  Etats Unis.
+                  </label>
+                <textarea id="comments" class="input-textarea" name="comment" disabled>SELECT LastName, FirstName, MiddleName, City, Gender
+FROM DimCustomer
+LEFT JOIN DimGeography ON DimCustomer.GeographyKey = DimGeography.GeographyKey
+WHERE FrenchCountryRegionName='États-Unis'
+ORDER BY  LastName, FirstName, MiddleName, City, Gender;</textarea>
+              </div>  
+              <br> 
+              <div>
+                <label>3. Combien y en a-t-il ? (faire une requête)</label>
+                <textarea id="comments" class="input-textarea" name="comment" disabled>SELECT TOP (1) ROW_NUMBER() OVER(PARTITION BY FrenchCountryRegionName ORDER BY City) as 'Nb Clients Aux Etats-Unis'
+FROM DimCustomer
+LEFT JOIN DimGeography ON DimCustomer.GeographyKey = DimGeography.GeographyKey
+WHERE FrenchCountryRegionName='États-Unis'
+ORDER BY 'Nb Clients Aux Etats-Unis' DESC;</textarea>
+<label>Il y a 7820 clients habitants aux Etats-Unis</label>
+              </div>  
+              <br> 
+              <div>
+                <label>4. Quelle catégorie de produit a été la plus vendue en quantité sur Internet ?
+                </label>
+                <textarea id="comments" class="input-textarea" name="comment" disabled>SELECT TOP (1) EnglishProductSubcategoryName, FrenchProductSubcategoryName, UnitPrice*OrderQuantity AS 'Nb Article Sold on Internet'
+FROM FactInternetSales as FIS
+INNER JOIN DimProduct as P ON FIS.ProductKey = P.ProductKey
+INNER JOIN DimProductSubcategory as PSC ON P.ProductSubcategoryKey = PSC.ProductSubcategoryKey
+ORDER BY 'Nb Article Sold on Internet' DESC;
+                  </textarea>
+                  <label>La catégorie de produit qui a été la plus vendue en quantité sur Internet est :Road Bikes (Ou Vélo de route en français).
+                  </label>
+              </div>  
+              <br> 
+              <div>
+                <label>5. Donner l’adresse complète de Shannon C Carlson
+                </label>
+                <textarea id="comments" class="input-textarea" name="comment" disabled>SELECT FirstName, MiddleName, LastName, AddressLine1, AddressLine2, City,StateProvinceName, EnglishCountryRegionName, PostalCode, SalesTerritoryKey, IpAddressLocator
+FROM DimCustomer as C
+LEFT JOIN DimGeography as G ON C.GeographyKey=G.GeographyKey
+WHERE LastName='Carlson' AND FirstName='Shannon' AND MiddleName='C';
+                  </textarea>
+                  <label>L’adresse complète de Shannon C Carlson est: 3839 Northgate Road, 4655, Hervey Bay,	Queensland,	Australia.
+                  </label>
+              </div>  
+              <br>   
+              <div>
+                <label>6. Quel employé a effectué le plus de commandes, combien ?
+                </label>
+                <textarea id="comments" class="input-textarea" name="comment" disabled>SELECT TOP (1) FirstName, MiddleName, LastName, COUNT(FRS.EmployeeKey) as 'Nb Orders'
+FROM FactResellerSales as FRS
+LEFT JOIN DimEmployee as E ON FRS.EmployeeKey=E.EmployeeKey
+GROUP BY FirstName, MiddleName, LastName
+ORDER BY 'Nb Orders' DESC;
+                  </textarea>
+                  <label>L'employé qui a effectué le plus de commandes est Jillian	Carson, il en a effectué 	7825.
+                  </label>
+              </div>  
+              <br> 
+              <div>
+                <label>7. Quelle employée a effectué le plus grand chiffre d’affaire, combien ?
+                </label>
+                <textarea id="comments" class="input-textarea" name="comment" disabled>SELECT TOP (1) FirstName, MiddleName, LastName, SUM(SalesAmount) as CA
+FROM FactResellerSales as FRS
+LEFT JOIN DimEmployee as E ON FRS.EmployeeKey=E.EmployeeKey
+WHERE GENDER='F'
+GROUP BY FirstName, MiddleName, LastName
+ORDER BY CA DESC;
+</textarea>
+<label>L'employée qui a effectué le plus grand chiffre d’affaire est Linda	C	Mitchell et pour 10367007,4286 dollars.
+</label>
+              </div>  
+              <br> 
+              <div>
+                <label>8. Quel département a été le plus impacté par les arrêts maladies ?
+                </label>
+                <textarea id="comments" class="input-textarea" name="comment" disabled>SELECT TOP (1) DepartmentName, sum(SickLeaveHours) as SickLeaveHours
+FROM DimEmployee
+GROUP BY DepartmentName
+ORDER BY SickLeaveHours DESC;
+                  </textarea>
+                  <label>Le département qui a été le plus impacté par les arrêts maladies est la Production
+                  </label>
+              </div>  
+              <br> 
+              <div>
+                <label>9. Jill Williams a un contentieux pour harcèlement dans son service. Nommez
+                  l’ensemble de ses collègues et supérieurs hiérarchiques directs ainsi que
+                  leur fonction au sein de la compagnie
+                </label>
+                <textarea id="comments" class="input-textarea" name="comment" disabled>SELECT FirstName, MiddleName, LastName, Title
+FROM DimEmployee
+WHERE EmployeeKey=(SELECT ParentEmployeeKey
+FROM DimEmployee
+WHERE LastName='Williams' AND FirstName='Jill')
+UNION
+SELECT FirstName, MiddleName, LastName, Title
+FROM DimEmployee
+WHERE DepartmentName IN (SELECT DepartmentName
+FROM DimEmployee
+WHERE LastName='Williams' AND FirstName='Jill');
+                  </textarea>
+                  <label>L’ensemble des collègues et supérieurs hiérarchiques directs de Jill Williams sont : David	M	Bradley	Marketing Manager, John	L	Wood	Marketing Specialist, Kevin	F	Brown	Marketing Assistant, Mary	A	Dempsey	Marketing Assistant, Mary	E	Gibson	Marketing Specialist,Sariya	E	Harnpadoungsataya	Marketing Specialist, Terry	J	Eminhizer	Marketing Specialist, Wanida	M	Benshoof	Marketing Assistant</label>
+              </div>  
+              <br> 
+              <div>
+                <label>10. Quelle(s) sous catégorie(s) de produits n’a pas été vendue ?
+                </label>
+                <textarea id="comments" class="input-textarea" name="comment" disabled>(SELECT EnglishProductSubcategoryName as 'SubCategories Never Sold'
+FROM DimProduct as P
+INNER JOIN DimProductSubcategory as PSC ON P.ProductSubcategoryKey=PSC.ProductSubcategoryKey
+EXCEPT
+SELECT EnglishProductSubcategoryName
+FROM DimProduct as P
+INNER JOIN DimProductSubcategory as PSC ON P.ProductSubcategoryKey=PSC.ProductSubcategoryKey
+WHERE ProductKey IN (SELECT ProductKey FROM FactInternetSales))
+INTERSECT
+(SELECT EnglishProductSubcategoryName as 'SubCategories Never Sold'
+FROM DimProduct as P
+INNER JOIN DimProductSubcategory as PSC ON P.ProductSubcategoryKey=PSC.ProductSubcategoryKey
+EXCEPT
+SELECT EnglishProductSubcategoryName
+FROM DimProduct as P
+INNER JOIN DimProductSubcategory as PSC ON P.ProductSubcategoryKey=PSC.ProductSubcategoryKey
+WHERE ProductKey IN (SELECT ProductKey FROM FactResellerSales));
+                  </textarea>
+                  <label>Les sous catégorie(s) de produits qui n’ont pas été vendues sont: Lights et Panniers (éclairage et saccoches en français).
+                  </label>
+              </div>  
+              <br> 
+              <div>
+                <label>11. Pour l’année 2011, quelle zone de vente a été la plus productive en
+                  nombre de commandes ? Même question en chiffre d’affaire ? (NB : une zone de
+                  vente suppose un achat en magasin)
+                </label>
+                <textarea id="comments" class="input-textarea" name="comment" disabled>SELECT TOP (1) SalesTerritoryRegion, SalesTerritoryCountry, SalesTerritoryGroup, COUNT(FRS.SalesTerritoryKey) as 'Nb Orders'
+FROM FactResellerSales as FRS
+LEFT JOIN DimSalesTerritory as ST ON FRS.SalesTerritoryKey =ST.SalesTerritoryKey
+WHERE OrderDateKey LIKE '2011%'
+GROUP BY SalesTerritoryRegion, SalesTerritoryCountry, SalesTerritoryGroup
+ORDER BY 'Nb Orders' DESC;
+
+SELECT TOP (1) SalesTerritoryRegion, SalesTerritoryCountry, SalesTerritoryGroup, OrderQuantity*UnitPrice as CA
+FROM FactResellerSales as FRS
+LEFT JOIN DimSalesTerritory as ST ON FRS.SalesTerritoryKey =ST.SalesTerritoryKey
+WHERE OrderDateKey LIKE '2011%'
+ORDER BY CA DESC;
+                  </textarea>
+                  <label>11. Pour l’année 2011, la zone de vente qui a été la plus productive en
+                    nombre de commandes est Southwest	United States	North America	avec un chiffre d’affaire de 27607,9188 dollars.
+                  </label>
+              </div>  
+              <br> 
+              <div>
+                <label>12. Sélectionner les clients qui n'ont pas encore passé commande et trier par
+                  ordre alphabétique ascendant.                  
+                </label>
+                <textarea id="comments" class="input-textarea" name="comment" disabled>(SELECT LastName, MiddleName, FirstName
+FROM DimCustomer
+WHERE CustomerKey NOT IN (SELECT CustomerKey FROM FactInternetSales)
+UNION
+SELECT LastName, MiddleName, FirstName
+FROM DimCustomer
+WHERE CustomerKey NOT IN (SELECT CustomerKey FROM FactResellerSales))
+ORDER BY LastName, MiddleName, FirstName;
+                  </textarea>
+                  <label>Seul NULL	NULL	Test n'a pas encore passé commande (COUCOU !)
+                  </label>
+              </div>  
+              <br> 
+              <div>
+                <label>13. Donner la liste de toutes les ventes de VTT depuis le début. On souhaite
+                  voir apparaître les noms et prénoms des clients, la date de commande et le
+                  numéro de commande sous les nomenclatures respectives de Nom, Prénom,
+                  Date Cde, Num Cde. Les ventes magasin seront nommées Magasin.                 
+                </label>
+                <textarea id="comments" class="input-textarea" name="comment" disabled>SELECT 'Magasin' as 'Type vente', FrenchProductName, FrenchProductSubcategoryName ,LastName as Nom, FirstName as Prenom, SalesOrderNumber as 'Num Cde', OrderDate as 'Date Cde'
+FROM FactResellerSales as FRS
+LEFT JOIN DimProduct as P ON P.ProductKey=FRS.ProductKey
+LEFT JOIN DimCustomer as C ON FRS.ResellerKey=C.CustomerKey
+LEFT JOIN DimProductSubcategory ON P.ProductSubcategoryKey=DimProductSubcategory.ProductSubcategoryKey
+WHERE P.ProductSubcategoryKey=1
+UNION
+(SELECT 'Internet' as 'Type vente', FrenchProductName, FrenchProductSubcategoryName ,LastName as Nom, FirstName as Prenom, SalesOrderNumber as 'Num Cde', OrderDate as 'Date Cde'
+FROM FactInternetSales as FIS
+LEFT JOIN DimProduct as P ON P.ProductKey=FIS.ProductKey
+LEFT JOIN DimCustomer as C ON FIS.CustomerKey=C.CustomerKey
+LEFT JOIN DimProductSubcategory ON P.ProductSubcategoryKey=DimProductSubcategory.ProductSubcategoryKey
+WHERE P.ProductSubcategoryKey=1)
+                  </textarea>
+              </div>  
+              <br> 
+              <div>
+                <label>14. Combien y-a-t-il de villes différentes dans la table DimGeography?                 
+                </label>
+                <textarea id="comments" class="input-textarea" name="comment" disabled>SELECT DISTINCT COUNT(City) as 'Nb Distinct Cities'
+FROM DimGeography                 
+                  </textarea>
+                  <label>Il y a 656 villes différentes dans la table DimGeography.                
+                  </label>
+              </div>  
+              <br> 
+              <div>
+                <label>15. Les casques sport ne se vendent pas bien. On souhaite modifier la promotion en
+                  cours. Passer celle-ci de 15% à 30%.</label>
+                <textarea id="comments" class="input-textarea" name="comment" disabled>UPDATE DimPromotion SET DiscountPct=0.3
+WHERE PromotionKey=11
+                  </textarea>
+              </div>  
+              <br> 
+              <div>
+                <label>16. Ecrire un déclencheur permettant d’ajouter une promotion lorsqu’on ajoute un
+                  nouvel article. La promotion se fait comme suit :
+                  - Nom de la promotion : Nouveau produit
+                  - Réduction : 15%
+                  - Type de promotion : Client
+                  - Commence à partir de maintenant pour 5 ans
+                  - La promotion se déclenche à partir de 5 articles commandés
+                  </label>
+                <textarea id="comments" class="input-textarea" name="comment" disabled> CREATE TRIGGER TR_PROMOTION_AFTER_NEW_PRODUCT
+ON DimProduct
+AFTER
+INSERT
+AS
+SET NOCOUNT ON;
+IF @@ROWCOUNT = 1 
+DECLARE @LastProdKey nvarchar(50)
+SELECT @LastProdKey =(select max(ProductKey) as last_id from DimProduct)
+BEGIN
+INSERT INTO DimPromotion
+VALUES((SELECT MAX(PromotionKey)+1 FROM DimPromotion), (SELECT MAX(PromotionKey)+1 FROM DimPromotion), (SELECT EnglishProductName FROM DimProduct WHERE ProductKey= @LastProdKey), (SELECT SpanishProductName FROM DimProduct WHERE ProductKey= @LastProdKey), (SELECT FrenchProductName FROM DimProduct WHERE ProductKey= @LastProdKey), 0.15,'New Product', 'Producto Nuevo', 'Nouveau produit', 'Customer', 'Cliente', 'Client', GETDATE(), DATEADD(yy, +5, GetDate()), 5, null)
+END</textarea>
+              </div>  
+              <br> 
+              <div>
+                <label>17. Tester le déclencheur en ajoutant un article cohérent via une procédure de
+                  test.</label>
+                <textarea id="comments" class="input-textarea" name="comment" disabled>CREATE PROCEDURE PR_Test_TR_PROMOTION_AFTER_NEW_PROD
+AS
+DECLARE @LastProdKey nvarchar(50)
+SET @LastProdKey =(select max(ProductKey) as last_id from DimProduct)+1
+
+INSERT INTO DimProduct(ProductKey, ProductAlternateKey, ProductSubcategoryKey, WeightUnitMeasureCode, SizeUnitMeasureCode, EnglishProductName, SpanishProductName, FrenchProductName, FinishedGoodsFlag, Color, EnglishDescription, FrenchDescription)
+VALUES(@LastProdKey,'FCKMI', 1, 'LB', 'CM', 'Iron Fist','Puño de Hierro','Poing de fer', 0, 'Black', 'Iron Fist combines elegance, robustness and power', 'Iron Fist associe élégance, robustesse et puissance');
+
+EXEC PR_Test_TR_PROMOTION_AFTER_NEW_PROD</textarea>
+              </div>  
+              <br> 
+              <div>
+                <label>18. Reprendre la question 4 et donner la catégorie la plus vendue par la
+                  société, toutes ventes confondues avec la somme perçue.
+                  </label>
+                <textarea id="comments" class="input-textarea" name="comment" disabled>SELECT TOP (1) * FROM
+(SELECT DimProductSubcategory.EnglishProductSubcategoryName, UnitPrice*OrderQuantity AS NbArtSold
+FROM FactInternetSales
+LEFT JOIN DimProduct ON FactInternetSales.ProductKey = DimProduct.ProductKey
+LEFT JOIN DimProductSubcategory ON DimProduct.ProductSubcategoryKey = DimProductSubcategory.ProductSubcategoryKey
+UNION
+SELECT DimProductSubcategory.EnglishProductSubcategoryName, UnitPrice*OrderQuantity AS NbArtSold 
+FROM FactResellerSales
+LEFT JOIN DimProduct ON FactResellerSales.ProductKey = DimProduct.ProductKey
+LEFT JOIN DimProductSubcategory ON DimProduct.ProductSubcategoryKey = DimProductSubcategory.ProductSubcategoryKey) as CA
+ORDER BY NbArtSold DESC;</textarea>
+<label>La catégorie la plus vendue par la société, toutes ventes confondues est Touring Bikes pour 30992,91</label>
+              </div>  
+              <br> 
+              <div>
+                <label>19. On veut optimiser la recherche des produits sur les nomenclatures
+                  anglaises. Ecrivez la requête permettant cette optimisation
+                  </label>
+                <textarea id="comments" class="input-textarea" name="comment" disabled>CREATE Clustered INDEX IDX_EngProdName ON DimProduct (EnglishProductName);</textarea>
+                <label>L'indexation de cette colonne parait être la technique la plus indiquée pour optimiser la recherche.
+                  </label>
+              </div>  
+              <br> 
+              <div>
+                <label>20. Bonus : Donnez les noms des clients étant mariés avec un employé de la
+                  compagnie 
+                  </label>
+                <textarea id="comments" class="input-textarea" name="comment" disabled>
+SELECT FirstName, LastName, IpAddressLocator
+From DimEmployee
+Left JOIN DimGeography ON DimGeography.SalesTerritoryKey=DimEmployee.SalesTerritoryKey
+CROSS APPLY STRING_SPLIT(EmergencyContactName, ' ')
+WHERE MaritalStatus='M'
+INTERSECT
+SELECT FirstName, LastName, IpAddressLocator
+FROM DimCustomer
+Left JOIN DimGeography ON DimGeography.GeographyKey=DimCustomer.GeographyKey
+WHERE MaritalStatus='M'
+                  </textarea>
+              </div>  
+              <br> 
+          <div class="form-group">
+            <button type="submit" id="submit" class="submit-button">
+              Submit
+            </button>
+          </div>
+        </form>
+      </div>      
+</body>
+  
+</html>
