@@ -276,7 +276,7 @@ LEFT JOIN DimCustomer as C ON FRS.ResellerKey=C.CustomerKey
 LEFT JOIN DimProductSubcategory ON P.ProductSubcategoryKey=DimProductSubcategory.ProductSubcategoryKey
 WHERE P.ProductSubcategoryKey=1
 UNION
-(SELECT 'Internet' as 'Type vente', FrenchProductName, FrenchProductSubcategoryName ,LastName as Nom, FirstName as Prenom, SalesOrderNumber as 'Num Cde', OrderDate as 'Date Cde'
+(SELECT LastName+' '+ FirstName  as NomPrenom, FrenchProductName, FrenchProductSubcategoryName ,LastName as Nom, FirstName as Prenom, SalesOrderNumber as 'Num Cde', OrderDate as 'Date Cde'
 FROM FactInternetSales as FIS
 LEFT JOIN DimProduct as P ON P.ProductKey=FIS.ProductKey
 LEFT JOIN DimCustomer as C ON FIS.CustomerKey=C.CustomerKey
