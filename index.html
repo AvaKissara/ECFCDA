@@ -15,12 +15,12 @@
     <div class="container">
         <header class="header">
           <h1 id="title" class="text-center">ECF by Lila Badi</h1>
-          <p id="description" class="description text-center">
-            Veuillez vous armer de toute votre indulgence avant la lecture de ce document.
-          </p>
         </header>
         <form id="survey-form" class="big-form">
           <div class="form-group">
+            <p id="description" class="description text-center">
+              Veuillez vous armer de toute votre indulgence avant la lecture de ce document.
+            </p>
             <h2>2. Analyser la base de données</h2>
             <h3>2.1 Analyse structurelle</h3>
             <label id="name-label" for="name">A l’aide du schéma de la base de données et de l’explorateur d’objet de SQL
@@ -269,14 +269,14 @@ ORDER BY LastName, MiddleName, FirstName;
                   numéro de commande sous les nomenclatures respectives de Nom, Prénom,
                   Date Cde, Num Cde. Les ventes magasin seront nommées Magasin.                 
                 </label>
-                <textarea id="comments" class="input-textarea" name="comment" disabled>SELECT 'Magasin' as 'Type vente', FrenchProductName, FrenchProductSubcategoryName ,LastName as Nom, FirstName as Prenom, SalesOrderNumber as 'Num Cde', OrderDate as 'Date Cde'
+                <textarea id="comments" class="input-textarea" name="comment" disabled>SELECT 'Magasin' as 'Type vente', FrenchProductName, FrenchProductSubcategoryName, SalesOrderNumber as 'Num Cde', OrderDate as 'Date Cde'
 FROM FactResellerSales as FRS
 LEFT JOIN DimProduct as P ON P.ProductKey=FRS.ProductKey
 LEFT JOIN DimCustomer as C ON FRS.ResellerKey=C.CustomerKey
 LEFT JOIN DimProductSubcategory ON P.ProductSubcategoryKey=DimProductSubcategory.ProductSubcategoryKey
 WHERE P.ProductSubcategoryKey=1
 UNION
-(SELECT LastName+' '+ FirstName  as NomPrenom, FrenchProductName, FrenchProductSubcategoryName ,LastName as Nom, FirstName as Prenom, SalesOrderNumber as 'Num Cde', OrderDate as 'Date Cde'
+(SELECT LastName+' '+ FirstName  as NomPrenom, FrenchProductName, FrenchProductSubcategoryName, SalesOrderNumber as 'Num Cde', OrderDate as 'Date Cde'
 FROM FactInternetSales as FIS
 LEFT JOIN DimProduct as P ON P.ProductKey=FIS.ProductKey
 LEFT JOIN DimCustomer as C ON FIS.CustomerKey=C.CustomerKey
