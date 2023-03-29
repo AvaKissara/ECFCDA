@@ -288,7 +288,7 @@ WHERE P.ProductSubcategoryKey=1)
               <div>
                 <label>14. Combien y-a-t-il de villes différentes dans la table DimGeography?                 
                 </label>
-                <textarea id="comments" class="input-textarea" name="comment" disabled>SELECT DISTINCT COUNT(City) as 'Nb Distinct Cities'
+                <textarea id="comments" class="input-textarea" name="comment" disabled>SELECT COUNT(DISTINCT City) as 'Nb Distinct Cities'
 FROM DimGeography                 
                   </textarea>
                   <label>Il y a 656 villes différentes dans la table DimGeography.                
